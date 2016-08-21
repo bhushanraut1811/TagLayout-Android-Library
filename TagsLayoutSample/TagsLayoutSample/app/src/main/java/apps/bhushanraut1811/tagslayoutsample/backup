@@ -1,0 +1,265 @@
+
+    @Override
+    protected void onLayout(boolean changed, int l, int t, int r, int b) {
+        // TODO Auto-generated method stub
+        final int count = getChildCount();
+        int curWidth, curHeight, curLeft, curTop, maxHeight;
+
+        //get the available size of child view
+        int childLeft = this.getPaddingLeft();
+        int childTop = this.getPaddingTop();
+        int childRight = this.getMeasuredWidth() - this.getPaddingRight();
+        int childBottom = this.getMeasuredHeight() - this.getPaddingBottom();
+        int childWidth = childRight - childLeft;
+        int childHeight = childBottom - childTop;
+
+        maxHeight = 0;
+        curLeft = childLeft;
+        curTop = childTop;
+        //walk through each child, and arrange it from left to right
+        for (int i = 0; i < count; i++) {
+            View child = getChildAt(i);
+            if (child.getVisibility() != GONE) {
+                //Get the maximum size of the child
+                curWidth = child.getMeasuredWidth();
+                curHeight = child.getMeasuredHeight();
+                maxHeight = curHeight;
+                child.setLayoutParams(new ViewGroup.LayoutParams(
+                        ViewGroup.LayoutParams.WRAP_CONTENT,
+                        ViewGroup.LayoutParams.WRAP_CONTENT));
+                child.measure(MeasureSpec.makeMeasureSpec(childWidth, MeasureSpec.AT_MOST),
+                        MeasureSpec.makeMeasureSpec(maxHeight, MeasureSpec.AT_MOST));
+
+                //wrap is reach to the end
+                if (curLeft + curWidth >= childRight) {
+                    curLeft = childLeft;
+                    curTop += maxHeight;
+                   // maxHeight = 0;
+                }
+                //do the layout
+                child.layout(curLeft, curTop, curLeft + curWidth, curTop + curHeight);
+                //store the max height
+
+                curLeft += curWidth;
+            }
+        }
+    }
+//modifed
+   /* @Override
+    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+
+        //get the available size of child view
+        int childLeft = this.getPaddingLeft();
+        int childTop = this.getPaddingTop();
+        int childRight = this.getMeasuredWidth() - this.getPaddingRight();
+        int childBottom = this.getMeasuredHeight() - this.getPaddingBottom();
+        int childWidth = childRight - childLeft;
+        int childHeight = childBottom - childTop;
+
+
+        int parentWidth = MeasureSpec.getSize(widthMeasureSpec);
+        int noOfChild = getChildCount();
+        int height = 0, width = 0;
+        int w = 0, h = 0;
+        for (int index = 0; index < noOfChild; index++) {
+            View childView = getChildAt(index);
+            int childViewHeight = childView.getMeasuredHeight();
+            int childViewWidth = childView.getMeasuredWidth();
+            height = childViewHeight;
+            if (childViewWidth > (childWidth - width)) {
+                height += childViewHeight;
+                w = width;
+                width = 0;
+            } else {
+                width += childViewWidth;
+            }
+
+
+        }
+        setMeasuredDimension(parentWidth, height);
+    }
+
+*/
+   /*
+    @Override
+    protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
+        float initialTop = 0.0f;
+        float initialLeft = 0.0f;
+        float initialRight = 0.0f;
+        float initialBottom = 0.0f;
+
+        *//*float iTop = 0.0f;
+        float iLeft = 0.0f;
+        float iRight = 0.0f;
+        float iBottom = 0.0f;
+        *//*
+        // float childWidth = 100.0f;
+        //float childHeight = 100.0f;
+
+        //  int width = getMeasuredWidth();
+        //int height = getMeasuredHeight();
+
+        // int centreRefPoints = getChildCount() + 1;
+        //float onePart = width / centreRefPoints;
+        for (int childIndex = 0; childIndex < getChildCount(); childIndex++) {
+            View child = getChildAt(childIndex);
+            int childHeight = child.getMeasuredHeight();
+            int childWidth = child.getMeasuredWidth();
+            Log.d("value", childWidth + " " + childHeight);
+            RectF r = new RectF();
+            *//*r.bottom = initialBottom;
+            r.right = initialRight;
+            r.top = initialTop;
+            r.left = initialLeft;
+            *//*
+
+            //apllying pythagoras theorem
+
+            //initialBottom += 1.41429f * childWidth;
+            //initialRight += 1.41429f * childWidth;
+            initialBottom += childHeight;
+            initialRight += childWidth;
+
+            r.bottom = initialBottom;
+            r.right = initialRight;
+            r.top = initialTop;
+            r.left = initialLeft;
+
+            initialLeft = r.right;
+            initialTop = r.bottom;
+            child.layout((int) r.left, (int) r.top, (int) r.right, (int) r.bottom);
+
+        }
+    }*/
+/*
+
+ @Override
+    protected void onLayout(boolean changed, int l, int t, int r, int b) {
+        super.onLayout(changed, l, t, r, b);
+        float top = 0.0f;
+        float left = 0.0f;
+        float right = 0.0f;
+        float bottom = 0.0f;
+        float prevRight = 0.0f;
+
+        float saveHeight = 0.0f;
+        float saveWidth = 0.0f;
+        float sum = 0.0f;
+
+
+        for (int childIndex = 0; childIndex < getChildCount(); childIndex++) {
+            View child = getChildAt(childIndex);
+            //temp
+            saveHeight = getChildAt(0).getHeight();
+            int childHeight = child.getMeasuredHeight();
+            int childWidth = child.getMeasuredWidth();
+            sum += childWidth;
+            Log.d("value", childWidth + " " + childHeight);
+
+            RectF rectF = new RectF();
+
+            if (childWidth > (getWidth() - right)) {
+
+                //top,left
+                top = saveHeight;
+                left = 0.0f;
+
+                saveHeight = +saveHeight;//update
+                //right,bottom
+                right = 0.0f;
+                bottom = saveHeight;
+            }
+
+            left = prevRight;
+            right += childWidth;
+            prevRight += right;
+
+
+            rectF.bottom = bottom;
+            rectF.right = right;
+            rectF.top = top;
+            rectF.left = left;
+            child.layout((int) rectF.left, (int) rectF.top, (int) rectF.right, (int) rectF.bottom);
+        }
+    }
+*/
+
+//==================================================================================================
+
+@Override
+    protected void onLayout(boolean changed, int l, int t, int r, int b) {
+        // TODO Auto-generated method stub
+        final int count = getChildCount();
+        int curWidth, curHeight, curLeft, curTop, maxHeight;
+
+        //get the available size of child view
+        int childLeft = this.getPaddingLeft();
+        int childTop = this.getPaddingTop();
+        int childRight = this.getMeasuredWidth() + this.getPaddingRight();
+        int childBottom = this.getMeasuredHeight() + this.getPaddingBottom();
+        int childWidth = childRight - childLeft;
+        int childHeight = childBottom - childTop;
+
+        maxHeight = 0;
+        curLeft = childLeft;
+        curTop = childTop;
+        //walk through each child, and arrange it from left to right
+        for (int i = 0; i < count; i++) {
+            View child = getChildAt(i);
+            if (child.getVisibility() != GONE) {
+                //Get the maximum size of the child
+                curWidth = child.getMeasuredWidth();
+                curHeight = child.getMeasuredHeight();
+                maxHeight = curHeight;
+                LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
+                        ViewGroup.LayoutParams.WRAP_CONTENT,
+                        ViewGroup.LayoutParams.WRAP_CONTENT);
+              //  params.setMargins(4, 4, 4, 4);
+
+                child.setLayoutParams(params);
+
+
+                child.measure(MeasureSpec.makeMeasureSpec(childWidth, MeasureSpec.AT_MOST),
+                        MeasureSpec.makeMeasureSpec(maxHeight, MeasureSpec.AT_MOST));
+
+                //wrap is reach to the end
+                if (curLeft + curWidth >= childRight) {
+                    curLeft = childLeft;
+                    curTop += maxHeight;
+                    // maxHeight = 0;
+                }
+                //do the layout
+                child.layout(curLeft, curTop, curLeft + curWidth, curTop + curHeight);
+                //store the max height
+
+                curLeft += curWidth;
+            }
+        }
+    }
+//===========================================================================================
+ArrangeLayouts
+
+ public void arrangeTags() {
+        int no = getChildCount();
+        int w = 0;
+        int h = 0;
+        for (int i = 0; i < no; i++) {
+            View childView = getChildAt(i);
+            if (w + childView.getWidth() < parentWidth) {
+                childView.setLayoutParams(new WindowManager.LayoutParams(childView.getWidth(), childView.getHeight()
+                        , w, h, 0, 0, 0));
+                w += childView.getWidth();
+            } else {
+                w = 0;
+                h += childView.getHeight();
+                childView.setLayoutParams(new WindowManager.LayoutParams(childView.getWidth(), childView.getHeight()
+                        , w, h, 0, 0, 0));
+                //add that view
+                w += childView.getWidth();
+            }
+
+
+        }
+
+    }
